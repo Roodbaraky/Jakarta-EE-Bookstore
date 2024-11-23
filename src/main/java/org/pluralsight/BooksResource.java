@@ -45,6 +45,7 @@ public class BooksResource {
 
     @GET
     @Produces(TEXT_PLAIN)
+    @Path("/count")
     public Response countBooks() {
         Long nbOfBooks = 0L;
 
@@ -58,12 +59,14 @@ public class BooksResource {
     public Response createBook(Book book) throws URISyntaxException {
         book.setId(1L);
         URI createdURI = new URI(book.getId().toString());
+        //persist book in db
         return Response.created(createdURI).entity(book).build();
     }
 
     @DELETE
     @Path("/{id}")
     public Response deleteBook(@PathParam("id") Long id) {
+        //delete book from db
         return Response.noContent().build();
     }
 }

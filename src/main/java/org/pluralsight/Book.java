@@ -3,15 +3,32 @@ package org.pluralsight;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class Book {
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name="T_BOOK")
+public class Book {
+    @Id
+    @GeneratedValue
     private Long id;
+    @Column(length = 200)
     private String title;
+    @Column(length = 50)
     private String isbn;
+    @Column(length = 1000)
     private String description;
     private BigDecimal price;
+    @Column(name = "publication_date")
     private LocalDate publicationDate;
+    @Column(name = "nb_of_pages")
+
     private Integer nbOfPages;
+    @Column(name = "image_url")
+
     private String imageUrl;
 
     public Long getId() {
