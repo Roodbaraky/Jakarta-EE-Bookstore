@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -16,16 +17,20 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 
 @Path("/api/books")
 @Produces(APPLICATION_JSON)
 @Consumes(APPLICATION_JSON)
 public class BooksResource {
 
+    @Inject
+    UriInfo uriInfo;
+    @Inject
+    BookService bookService;
     @GET
     public Response getBooks() {
-        List<Book> books = new ArrayList<>();
-
+        List<Book> books = bookService.findAll();
         if(books.isEmpty())
             return Response.noContent().build();
 
@@ -35,8 +40,7 @@ public class BooksResource {
     @GET
     @Path("/{id}")
     public Response getBook(@PathParam("id") Long id) {
-        Book book = null;
-
+        Book book = bookService.find(id);
         if (book == null)
             return Response.status(Response.Status.NOT_FOUND).build();
 
@@ -47,7 +51,7 @@ public class BooksResource {
     @Produces(TEXT_PLAIN)
     @Path("/count")
     public Response countBooks() {
-        Long nbOfBooks = 0L;
+        Long nbOfBooks = bookService.countAll();
 
         if (nbOfBooks == 0)
             return Response.noContent().build();
@@ -57,16 +61,15 @@ public class BooksResource {
 
     @POST
     public Response createBook(Book book) throws URISyntaxException {
-        book.setId(1L);
-        URI createdURI = new URI(book.getId().toString());
-        //persist book in db
+        book = bookService.create(book);
+        URI createdURI = uriInfo.getAbsolutePathBuilder().path(Long.toString(book.getId())).build();
         return Response.created(createdURI).entity(book).build();
     }
 
     @DELETE
     @Path("/{id}")
     public Response deleteBook(@PathParam("id") Long id) {
-        //delete book from db
+        bookService.delete(id);
         return Response.noContent().build();
     }
 }

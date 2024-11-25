@@ -5,15 +5,20 @@ import static jakarta.transaction.Transactional.TxType.SUPPORTS;
 
 import java.util.List;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 @Transactional(SUPPORTS)
+@ApplicationScoped
 public class BookService {
     @Inject
     EntityManager em;
+
+    @Inject
+    IsbnGenerator generator;
 
     public Book find(Long id) {
         return em.find(Book.class, id);
@@ -32,6 +37,7 @@ public class BookService {
 
     @Transactional(REQUIRED)
     public Book create(Book book) {
+        book.setIsbn(generator.generateNumber());
         em.persist(book);
         return book;
     }

@@ -19,7 +19,7 @@ public class Book {
     private String title;
     @Column(length = 50)
     private String isbn;
-    @Column(length = 1000)
+    @Column(length = 10000)
     private String description;
     private BigDecimal price;
     @Column(name = "publication_date")
