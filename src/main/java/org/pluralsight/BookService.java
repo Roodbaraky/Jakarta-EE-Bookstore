@@ -14,6 +14,12 @@ import jakarta.transaction.Transactional;
 
 @Named
 @Transactional(SUPPORTS)
+//Specify the transaction policy
+//Transactions are a bit like a promise.all, they ensure all operations complete, or none of them do.
+//SUPPORTS - if a transaction is active, JTA will use it. If not, it will run without a transaction.
+//REQUIRED - if a transaction is active, JTA will use it. If not, it will create a new one.
+//REQUIRED is the implicit default, we only use it below to override the SUPPORTS policy we set for the class
+//Supports is fine for some of these methods, as they are effectively read-only, and don't make critical make or break changes to the database.
 @ApplicationScoped
 public class BookService {
     @Inject
@@ -45,7 +51,6 @@ public class BookService {
     }
 
     @Transactional(REQUIRED)
-
     public void delete(Long id) {
         em.remove(em.getReference(Book.class, id));
     }
