@@ -3,32 +3,49 @@ package org.pluralsight;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import jakarta.json.bind.annotation.JsonbDateFormat;
+import jakarta.json.bind.annotation.JsonbNumberFormat;
+import jakarta.json.bind.annotation.JsonbProperty;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name="T_BOOK")
+@Table(name = "T_BOOK")
 public class Book {
     @Id
     @GeneratedValue
     private Long id;
     @Column(length = 200)
+    @NotNull
+    @Size(min = 1, max = 200)
     private String title;
     @Column(length = 50)
     private String isbn;
     @Column(length = 10000)
+    @Size(min = 10, max = 10000)
     private String description;
+    @Min(1)
+    @JsonbNumberFormat(value = "$#0.00")
     private BigDecimal price;
     @Column(name = "publication_date")
+    @Past
+    @JsonbDateFormat(value = "dd-MM-yyyy")
+    @JsonbProperty("publication-date")
     private LocalDate publicationDate;
     @Column(name = "nb_of_pages")
+    @JsonbProperty("nb-of-pages")
 
     private Integer nbOfPages;
     @Column(name = "image_url")
-
+    @JsonbTransient
     private String imageUrl;
 
     public Long getId() {

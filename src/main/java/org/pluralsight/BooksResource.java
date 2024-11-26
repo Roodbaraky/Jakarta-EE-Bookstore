@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.inject.Inject;
+import jakarta.validation.constraints.Min;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -39,7 +40,7 @@ public class BooksResource {
 
     @GET
     @Path("/{id}")
-    public Response getBook(@PathParam("id") Long id) {
+    public Response getBook(@PathParam("id") @Min(1) Long id) {
         Book book = bookService.find(id);
         if (book == null)
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -68,7 +69,7 @@ public class BooksResource {
 
     @DELETE
     @Path("/{id}")
-    public Response deleteBook(@PathParam("id") Long id) {
+    public Response deleteBook(@PathParam("id") @Min(1) Long id) {
         bookService.delete(id);
         return Response.noContent().build();
     }
