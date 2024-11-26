@@ -17,8 +17,12 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 @Entity
 @Table(name = "T_BOOK")
+@Schema(name = "Book", description = "POJO that represents a book")
+//POJO = Plain Old Java Object (lol)
 public class Book {
     @Id
     @GeneratedValue
